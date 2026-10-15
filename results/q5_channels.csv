@@ -1,0 +1,6 @@
+channel,subscribers_per_month,churn_pct,pct_monthly_manual,churn_pct_auto_renew_only
+Channel 4,61527.0,8.5,36.7,3.2
+Channel 3,150031.0,5.7,23.4,2.5
+Channel 9,338303.0,4.1,12.3,1.9
+Other or unknown,110512.0,3.1,0.2,2.9
+Channel 7,464549.0,2.0,0.6,1.8

@@ -1,0 +1,5 @@
+# The KKBox files and the database built from them are never committed.
+/data/
+__pycache__/
+.DS_Store
+.venv/

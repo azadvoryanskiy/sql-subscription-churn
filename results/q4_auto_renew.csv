@@ -1,0 +1,5 @@
+payment_setup,subscribers_per_month,pct_of_subscribers,left_in_six_months,pct_of_leavers,churn_pct
+"Monthly, auto-renew",847361.0,75.3,105929,43.8,2.08
+"Longer plan, paid up front",172443.0,15.3,30958,12.8,2.99
+"Monthly, manual",102289.0,9.1,103007,42.6,16.78
+Shorter than a month,2827.0,0.3,1679,0.7,9.9
