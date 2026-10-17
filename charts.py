@@ -6,20 +6,26 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib import font_manager
 
 ROOT = Path(__file__).parent
 RESULTS = ROOT / "results"
 IMG = ROOT / "img"
 
-SURFACE = "#fcfcfb"
-TEXT = "#0b0b0b"
-MUTED = "#52514e"
-GRID = "#e6e5e1"
-BLUE = "#2a78d6"
-ORANGE = "#eb6834"
+# The portfolio's colours: ink background, white text, one volt colour for the thing
+# to look at and grey for the rest. Onest ships in fonts/ (SIL Open Font License).
+SURFACE = "#0A0A0A"
+TEXT = "#FFFFFF"
+MUTED = "#8C8C87"
+GRID = "#2A2A2A"
+VOLT = "#D6FA50"
+GREY = "#5E5E59"
+
+for font in (ROOT / "fonts").glob("*.ttf"):
+    font_manager.fontManager.addfont(font)
 
 plt.rcParams.update({
-    "font.family": "Helvetica Neue",
+    "font.family": ["Onest", "Helvetica Neue", "DejaVu Sans"],
     "font.size": 11,
     "text.color": TEXT,
     "axes.labelcolor": MUTED,
@@ -41,7 +47,7 @@ def clean(ax, grid_axis="y"):
 
 
 def title(fig, headline, subtitle):
-    fig.text(0.02, 0.965, headline, fontsize=14, fontweight="bold", va="top")
+    fig.text(0.02, 0.965, headline, fontsize=14, fontweight=600, va="top")
     fig.text(0.02, 0.895, subtitle, fontsize=10.5, color=MUTED, va="top")
 
 
@@ -57,7 +63,7 @@ def monthly_churn():
 
     fig, ax = plt.subplots(figsize=(8, 4))
     fig.subplots_adjust(left=0.07, right=0.97, top=0.8, bottom=0.1)
-    ax.bar(labels, df["churn_pct"], width=0.5, color=BLUE)
+    ax.bar(labels, df["churn_pct"], width=0.5, color=VOLT)
     for x, value in enumerate(df["churn_pct"]):
         ax.text(x, value + 0.1, f"{value:.1f}%", ha="center", va="bottom", fontsize=10.5)
     ax.annotate("includes 15,348 people from\none skipped billing run",
@@ -79,8 +85,8 @@ def payment_setup():
     fig.subplots_adjust(left=0.27, right=0.95, top=0.72, bottom=0.08)
     height = 0.3
     for offset, column, colour, label in [
-        (+height / 2 + 0.02, "pct_of_subscribers", BLUE, "Share of subscribers"),
-        (-height / 2 - 0.02, "pct_of_leavers", ORANGE, "Share of people who leave"),
+        (+height / 2 + 0.02, "pct_of_subscribers", GREY, "Share of subscribers"),
+        (-height / 2 - 0.02, "pct_of_leavers", VOLT, "Share of people who leave"),
     ]:
         ax.barh(df.index + offset, df[column], height=height, color=colour, label=label)
         for y, value in zip(df.index + offset, df[column]):
@@ -106,8 +112,8 @@ def channels():
     fig.subplots_adjust(left=0.07, right=0.97, top=0.72, bottom=0.15)
     width = 0.3
     for offset, column, colour, label in [
-        (-width / 2 - 0.015, "churn_pct", BLUE, "All subscribers"),
-        (+width / 2 + 0.015, "churn_pct_auto_renew_only", ORANGE, "Monthly auto-renew subscribers only"),
+        (-width / 2 - 0.015, "churn_pct", GREY, "All subscribers"),
+        (+width / 2 + 0.015, "churn_pct_auto_renew_only", VOLT, "Monthly auto-renew subscribers only"),
     ]:
         ax.bar(df.index + offset, df[column], width=width, color=colour, label=label)
         for x, value in zip(df.index + offset, df[column]):
@@ -129,7 +135,8 @@ def comebacks():
 
     fig, ax = plt.subplots(figsize=(8, 3.9))
     fig.subplots_adjust(left=0.36, right=0.95, top=0.76, bottom=0.1)
-    ax.barh(df.index, df["pct_back"], height=0.42, color=BLUE)
+    colours = [VOLT if "Manual" in how else GREY for how in df["how_they_left"]]
+    ax.barh(df.index, df["pct_back"], height=0.42, color=colours)
     for y, value in zip(df.index, df["pct_back"]):
         ax.text(value + 1.2, y, f"{value:.0f}%", va="center", fontsize=10.5)
     ax.set_yticks(df.index, labels, fontsize=10.5, color=TEXT)
